@@ -1,0 +1,65 @@
+{% extends 'llm/base.html' %}
+{% load static %}
+
+{% block content %}
+<form id="summary-form" method="POST" class="form mb-3" enctype="multipart/form-data">
+  {% csrf_token %}
+  <p class="fw-bold">If something is wrong, please let us know</p>
+  <div class="row g-4">
+    <!-- attachment -->
+    <div class="form-group col-md-6">
+        <label for="attachment" class="form-label">Attachment</label>
+      <div>
+        <input class="form-control" name="attachment" type="file" id="attachment" accept=".pdf">
+        {% if form.errors.attachment %}
+        <div class="small text-danger mt-2">{{ form.errors.attachment|join:' ' }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% if form.errors.all %}
+    <div class="alert alert-danger mt-2">{{ form.errors.all|join:' ' }}</div>
+    {% endif %}
+    <div class="form-group col-12">
+      <button class="btn btn-primary" type="submit">
+        Submit
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+  <div id="toast" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body" id="message">
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const node = new bootstrap.Toast(document.getElementById('toast'), {autohide: true, delay: 3000});
+    const form = document.getElementById("summary-form");
+    const messageEle = document.getElementById("message");
+    form.onsubmit = async function (e) {
+      e.preventDefault();
+      let message = "";
+      const response = await fetch(form.action, {
+        method: "POST",
+        cache: "no-cache",
+        credentials: "same-origin",
+        body: new FormData(form),
+      });
+      if (response.status === 200) {
+        let result = await response.json();
+        message = result.message;
+      } else if (response.status === 400) {
+        let result = await response.json();
+        message = result.message;
+      } else {
+        message = "Something went wrong, please try again later.";
+      }
+      messageEle.innerHTML = message;
+      node.show();
+    };
+  });
+</script>
+{% endblock content %}

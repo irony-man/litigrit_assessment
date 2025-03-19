@@ -1,0 +1,26 @@
+
+{% extends 'llm/base.html' %}
+{% load static markdownify %}
+
+{% block title %}
+  {{ summary.title }}
+{% endblock title %}
+
+{% block content %}
+<div>
+  <div class="mb-5">
+    <h4>
+      <a href="{{summary.attachment.url}}" target="_blank" rel="noopener noreferrer">{{ summary.title }}</a>
+    </h4>
+    <p>Created At: <strong>{{ summary.created }}</strong></p>
+  </div>
+  <div class="mb-5">
+    <h5 class="mb-3">Summary</h5>
+    <div class="lh-lg">{{ summary.summary|markdownify }}</div>
+  </div>
+  <div class="mb-5">
+    <h5 class="mb-3">Extracted Text</h5>
+    <div class="lh-lg">{{ summary.extracted_text|markdownify }}</div>
+  </div>
+</div>
+{% endblock content %}

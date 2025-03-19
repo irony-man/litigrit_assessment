@@ -8,32 +8,73 @@ asgiref==3.8.1
     # via
     #   -r requirements.in
     #   django
+astroid==2.15.8
+    # via pylint
+black==24.2.0
+    # via -r requirements.in
+bleach[css]==6.2.0
+    # via django-markdownify
 build==1.2.2.post1
     # via
     #   -r requirements.in
     #   pip-tools
+certifi==2025.1.31
+    # via requests
 cfgv==3.4.0
     # via
     #   -r requirements.in
     #   pre-commit
+charset-normalizer==3.4.1
+    # via requests
 click==8.1.8
     # via
     #   -r requirements.in
+    #   black
     #   pip-tools
+coverage==6.4
+    # via -r requirements.in
+dill==0.3.9
+    # via pylint
 distlib==0.3.9
     # via
     #   -r requirements.in
     #   virtualenv
 django==5.1.7
+    # via
+    #   -r requirements.in
+    #   django-markdownify
+django-markdownify==0.9.5
     # via -r requirements.in
 filelock==3.18.0
     # via
     #   -r requirements.in
     #   virtualenv
+flake8==4.0.1
+    # via
+    #   -r requirements.in
+    #   flake8-isort
+flake8-isort==4.1.1
+    # via -r requirements.in
 identify==2.6.9
     # via
     #   -r requirements.in
     #   pre-commit
+idna==3.10
+    # via requests
+isort==5.13.2
+    # via
+    #   flake8-isort
+    #   pylint
+lazy-object-proxy==1.10.0
+    # via astroid
+markdown==3.7
+    # via django-markdownify
+mccabe==0.6.1
+    # via
+    #   flake8
+    #   pylint
+mypy-extensions==1.0.0
+    # via black
 nodeenv==1.9.1
     # via
     #   -r requirements.in
@@ -41,15 +82,34 @@ nodeenv==1.9.1
 packaging==24.2
     # via
     #   -r requirements.in
+    #   black
     #   build
+pathspec==0.12.1
+    # via black
 pip-tools==7.4.1
     # via -r requirements.in
 platformdirs==4.3.6
     # via
     #   -r requirements.in
+    #   black
+    #   pylint
     #   virtualenv
 pre-commit==4.1.0
     # via -r requirements.in
+psycopg2==2.9.3
+    # via -r requirements.in
+pycodestyle==2.8.0
+    # via flake8
+pyflakes==2.4.0
+    # via flake8
+pylint==2.17.7
+    # via
+    #   pylint-django
+    #   pylint-plugin-utils
+pylint-django==2.5.3
+    # via -r requirements.in
+pylint-plugin-utils==0.8.2
+    # via pylint-django
 pyproject-hooks==1.2.0
     # via
     #   -r requirements.in
@@ -59,18 +119,36 @@ pyyaml==6.0.2
     # via
     #   -r requirements.in
     #   pre-commit
+requests==2.32.3
+    # via tika
 sqlparse==0.5.3
     # via
     #   -r requirements.in
     #   django
+testfixtures==6.18.5
+    # via flake8-isort
+tika==2.6.0
+    # via -r requirements.in
+tinycss2==1.4.0
+    # via bleach
+tomlkit==0.13.2
+    # via pylint
+urllib3==2.3.0
+    # via requests
 virtualenv==20.29.3
     # via
     #   -r requirements.in
     #   pre-commit
+webencodings==0.5.1
+    # via
+    #   bleach
+    #   tinycss2
 wheel==0.45.1
     # via
     #   -r requirements.in
     #   pip-tools
+wrapt==1.17.2
+    # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

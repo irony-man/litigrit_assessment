@@ -1,0 +1,35 @@
+{% extends 'llm/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Attachment</th>
+        <th scope="col">Summary</th>
+        <th scope="col">Extracted Text</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for summary in history %}
+        <tr>
+          <th scope="row">
+            <a href="{% url 'llm:summary' summary.uid %}">
+              {{ summary.title }}
+            </a>
+          </th>
+          <td>
+            <a href="{{summary.attachment.url}}" target="_blank" rel="noopener noreferrer">
+              {{ summary.attachment.name }}
+            </a>
+          </td>
+          <td>{{ summary.short_summary }}</td>
+          <td>{{ summary.short_extracted_text }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

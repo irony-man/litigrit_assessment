@@ -15,5 +15,13 @@ pyproject_hooks==1.2.0
 PyYAML==6.0.2
 setuptools==76.0.0
 sqlparse==0.5.3
+tika==2.6.0
 virtualenv==20.29.3
 wheel==0.45.1
+psycopg2==2.9.3
+flake8==4.0.1
+flake8-isort==4.1.1
+coverage==6.4
+black==24.2.0
+pylint-django==2.5.3
+django-markdownify==0.9.5
