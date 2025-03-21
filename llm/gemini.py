@@ -24,5 +24,4 @@ def get_summary_from_google(content: str):
         contents=[content],
         config=generate_content_config,
     )
-    print(response)
     return response.parsed

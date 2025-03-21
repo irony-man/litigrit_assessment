@@ -7,19 +7,26 @@
 {% endblock title %}
 
 {% block content %}
-<div>
+<div class="mt-5">
+  <nav style="--bs-breadcrumb-divider: '>';" class="mb-5">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'llm:home' %}">Home</a></li>
+      <li class="breadcrumb-item active">{{ summary.title }}</li>
+    </ol>
+  </nav>
   <div class="mb-5">
     <h4>
-      <a href="{{summary.attachment.url}}" target="_blank" rel="noopener noreferrer">{{ summary.title }}</a>
+      <a href="{{ summary.attachment.url }}" target="_blank" rel="noopener noreferrer">{{ summary.title }}</a>
     </h4>
-    <p>Created At: <strong>{{ summary.created }}</strong></p>
+    <p class="small mb-0">Created At: <strong>{{ summary.created }}</strong></p>
   </div>
+
   <div class="mb-5">
-    <h5 class="mb-3">Summary</h5>
+    <h5 class="fw-bold mb-3">Summary</h5>
     <div class="lh-lg">{{ summary.summary|markdownify }}</div>
   </div>
   <div class="mb-5">
-    <h5 class="mb-3">Extracted Text</h5>
+    <h5 class="fw-bold mb-3">Extracted Text</h5>
     <div class="lh-lg">{{ summary.extracted_text|markdownify }}</div>
   </div>
 </div>

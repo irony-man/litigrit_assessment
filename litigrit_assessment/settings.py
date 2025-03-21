@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -137,7 +137,7 @@ STATIC_ROOT = BASE_DIR.joinpath("static")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "global_static"),)
 
 # Media
-MEDIA_URL = "/media/"
+MEDIA_URL = "/"
 MEDIA_ROOT = os.getenv("MEDIA_ROOT")
 
 

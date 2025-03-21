@@ -1,0 +1,14 @@
+a {
+  text-decoration: none !important;
+  font-weight: bold;
+}
+
+.bot-response-box {
+  width: 90%;
+  max-width: 780px;
+}
+
+.max-w-640 {
+  width: 100%;
+  max-width: 640px;
+}

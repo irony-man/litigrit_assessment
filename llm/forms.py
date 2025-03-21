@@ -7,4 +7,4 @@ from llm.models import Summary
 class SummaryForm(ModelForm):
     class Meta:
         model = Summary
-        fields = ["attachment"]
+        fields = ("attachment",)
