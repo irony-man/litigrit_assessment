@@ -145,7 +145,7 @@ STATIC_ROOT = BASE_DIR.joinpath("static")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "global_static"),)
 
 # Media
-MEDIA_URL = "/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.getenv("MEDIA_ROOT")
 
 

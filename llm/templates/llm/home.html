@@ -1,5 +1,5 @@
 {% extends 'llm/base.html' %}
-{% load static %}
+{% load static markdownify %}
 
 {% block content %}
 {% if history.count == 0 %}
@@ -23,53 +23,36 @@
     </div>
   </div>
 {% else %}
-  <div class="my-5 pb-5">
-    <ul class="list-unstyled">
-      {% for summary in history %}
-      <li class="d-flex justify-content-end mb-4">
-        <div class="card shadow">
-          <div class="card-body">
-            <a href="{{ summary.attachment }}" target="_blank" rel="noopener noreferrer">{{ summary.attachment }}</a>
-          </div>
-          <div class="card-footer">
-            <p class="small mb-0">{{ summary.created }}</p>
-          </div>
+  <ul class="list-unstyled my-5">
+    {% for summary in history %}
+    <li class="d-flex justify-content-end mb-4">
+      <div class="card shadow chat-box">
+        <div class="card-header fw-bold">
+          {{ summary.attachment }}
         </div>
-      </li>
-      <li class="d-flex justify-content-start mb-4">
-        <div class="card shadow bot-response-box">
-          <div class="card-header fw-bold">
-            {{ summary.title }}
-          </div>
-          <div class="card-body">
-            <p class="card-text">
-              {{ summary.summary }}
-            </p>
-            <a href="{% url 'llm:summary' summary.uid %}" class="btn btn-sm btn-outline-primary">Get Full Info</a>
-          </div>
+        <div class="card-body">
+          <p class="card-text mb-3">{{ summary.short_extracted_text|markdownify }}</p>
+          <a href="{% url 'llm:summary' summary.uid %}" class="btn btn-sm btn-outline-primary">Get Full Info</a>
         </div>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
+        <div class="card-footer">
+          <p class="small mb-0">{{ summary.created }}</p>
+        </div>
+      </div>
+    </li>
+    <li class="d-flex justify-content-start mb-4">
+      <div class="card shadow chat-box">
+        <div class="card-header fw-bold">
+          {{ summary.title }}
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            {{ summary.summary|markdownify }}
+          </p>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
 {% endif %}
-
-<form class="form py-3 bg-body mb-0 fixed-bottom" id="summary-form" action="/" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="container shadow">
-    <div class="input-group">
-      <input class="form-control" name="attachment" type="file" id="attachment" accept=".pdf" required>
-      <button class="btn btn-primary" type="submit">
-        Submit
-      </button>
-    </div>
-    {% if form.errors.attachment %}
-      <div class="small text-danger mt-2">{{ form.errors.attachment|join:' ' }}</div>
-    {% endif %}
-    {% if form.errors.all %}
-      <div class="alert alert-danger mt-2">{{ form.errors.all|join:' ' }}</div>
-    {% endif %}
-  </div>
-</form>
 
 {% endblock content %}

@@ -26,7 +26,31 @@
     {% block content %}{% endblock content %}
   </div>
 
+  <div class="pt-5">
+    <form class="form py-4 bg-body mb-0 fixed-bottom" method="post" id="summary-form" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="container shadow">
+        <div class="input-group">
+          <input class="form-control" name="attachment" type="file" id="attachment" accept=".pdf" required>
+          <button class="btn btn-primary" type="submit" id="submit-btn">
+            <span id="submit-btn-spinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+            <span id="submit-btn-text" role="status">Submit</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div id="error-toast" class="toast bg-danger-subtle" role="alert">
+      <div class="toast-body" id="message">
+      </div>
+    </div>
+  </div>
+
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}" type="module"></script>
 
   {% block script %}{% endblock script %}
 </body>

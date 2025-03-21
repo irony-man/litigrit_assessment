@@ -9,7 +9,12 @@ urlpatterns = [
         name="home",
     ),
     path(
-        "summary/<uuid:summary_uid>/",
+        "summary/",
+        view=views.SummaryFormView.as_view(),
+        name="summary-form",
+    ),
+    path(
+        "summary/<uuid:uid>/",
         view=views.SummaryPageView.as_view(),
         name="summary",
     ),
