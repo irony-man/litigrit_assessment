@@ -23,7 +23,7 @@
     </div>
   </div>
 {% else %}
-  <ul class="list-unstyled my-5">
+  <ul id="history" class="list-unstyled my-5">
     {% for summary in history %}
     <li class="d-flex justify-content-end mb-4">
       <div class="card shadow chat-box">
@@ -53,6 +53,7 @@
     </li>
     {% endfor %}
   </ul>
+  <div class="pb-5"></div>
 {% endif %}
 
 {% endblock content %}

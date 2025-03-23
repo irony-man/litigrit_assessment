@@ -15,7 +15,7 @@ pyproject_hooks==1.2.0
 PyYAML==6.0.2
 setuptools==76.0.0
 sqlparse==0.5.3
-tika==2.6.0
+PyMuPDF==1.25.4
 virtualenv==20.29.3
 wheel==0.45.1
 psycopg2-binary==2.9.10

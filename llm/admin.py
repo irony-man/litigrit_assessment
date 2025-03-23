@@ -7,10 +7,10 @@ from llm.models import Summary
 class SummaryAdmin(admin.ModelAdmin):
     list_display = (
         "title",
-        "summary",
         "attachment",
+        "summary_length",
+        "summary",
         "created",
-        "updated",
     )
     readonly_fields = (
         "title",

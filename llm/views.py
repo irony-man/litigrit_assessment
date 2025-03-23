@@ -51,9 +51,7 @@ class SummaryFormView(FormView):
     success_url = reverse_lazy("llm:home")
 
     def form_valid(self, form: SummaryForm):
-        if attachment := form.cleaned_data.get("attachment"):
-            Summary.objects.create(attachment=attachment)
-
+        Summary.objects.create(**form.cleaned_data)
         if is_ajax(self.request):
             return JsonResponse(
                 data={
@@ -63,6 +61,16 @@ class SummaryFormView(FormView):
                 status=201,
             )
         return redirect(self.success_url)
+
+    def form_invalid(self, form: SummaryForm):
+        if is_ajax(self.request):
+            return JsonResponse(
+                {
+                    "errors": dict(form.errors.items()),
+                },
+                status=400,
+            )
+        return super(SummaryFormView, self).form_invalid(form)
 
 
 class SummaryPageView(TemplateView):

@@ -25,24 +25,46 @@
   <div class="container">
     {% block content %}{% endblock content %}
   </div>
-
-  <div class="pt-5">
-    <form class="form py-4 bg-body mb-0 fixed-bottom" method="post" id="summary-form" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="container shadow">
-        <div class="input-group">
-          <input class="form-control" name="attachment" type="file" id="attachment" accept=".pdf" required>
-          <button class="btn btn-primary" type="submit" id="submit-btn">
-            <span id="submit-btn-spinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
-            <span id="submit-btn-text" role="status">Submit</span>
-          </button>
-        </div>
+  <div>
+    <div class="fixed-bottom py-3 bg-body mb-0 fixed-bottom d-md-none">
+      <div class="container">
+        <button class="btn btn-primary w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom">Open Form</button>
       </div>
-    </form>
+    </div>
+
+    <div class="offcanvas-md offcanvas-bottom" tabindex="-1" id="offcanvasBottom">
+      <form class="form py-4 bg-body mb-0 fixed-bottom" method="post" id="summaryForm" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container">
+          <div class="row gx-3 gy-4">
+            <div class="col-md-5 col-12">
+              <label for="attachment" class="form-label d-md-none">Attachment</label>
+              <input class="form-control" name="attachment" type="file" id="attachment" accept="application/pdf" required>
+              <div id="attachmentError" class="text-danger small mt-2" style="display:none;"></div>
+            </div>
+            <div class="col-md-5 col-12">
+              <label for="summary_length" class="form-label d-md-none">Summary Length</label>
+              <select class="form-select" id="summary_length" name="summary_length" required>
+                {% for choice in choices.summary_length %}
+                  <option value="{{ choice.value }}">{{ choice.name }}</option>
+                {% endfor %}
+              </select>
+              <div id="summaryLengthError" class="text-danger small mt-2" style="display:none;"></div>
+            </div>
+            <div class="col-md-2 col-12">
+              <button class="btn btn-primary w-100" type="submit" id="submit-btn">
+                <span id="submitBtnSpinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                <span id="submitBtnText" role="status">Submit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-    <div id="error-toast" class="toast bg-danger-subtle" role="alert">
+    <div id="errorToast" class="toast bg-danger-subtle" role="alert">
       <div class="toast-body" id="message">
       </div>
     </div>

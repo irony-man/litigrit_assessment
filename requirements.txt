@@ -18,14 +18,10 @@ build==1.2.2.post1
     # via
     #   -r requirements.in
     #   pip-tools
-certifi==2025.1.31
-    # via requests
 cfgv==3.4.0
     # via
     #   -r requirements.in
     #   pre-commit
-charset-normalizer==3.4.1
-    # via requests
 click==8.1.8
     # via
     #   -r requirements.in
@@ -59,8 +55,6 @@ identify==2.6.9
     # via
     #   -r requirements.in
     #   pre-commit
-idna==3.10
-    # via requests
 isort==5.13.2
     # via
     #   flake8-isort
@@ -110,6 +104,8 @@ pylint-django==2.5.3
     # via -r requirements.in
 pylint-plugin-utils==0.8.2
     # via pylint-django
+pymupdf==1.25.4
+    # via -r requirements.in
 pyproject-hooks==1.2.0
     # via
     #   -r requirements.in
@@ -119,22 +115,16 @@ pyyaml==6.0.2
     # via
     #   -r requirements.in
     #   pre-commit
-requests==2.32.3
-    # via tika
 sqlparse==0.5.3
     # via
     #   -r requirements.in
     #   django
 testfixtures==6.18.5
     # via flake8-isort
-tika==2.6.0
-    # via -r requirements.in
 tinycss2==1.4.0
     # via bleach
 tomlkit==0.13.2
     # via pylint
-urllib3==2.3.0
-    # via requests
 virtualenv==20.29.3
     # via
     #   -r requirements.in
