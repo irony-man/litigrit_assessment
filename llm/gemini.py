@@ -48,6 +48,6 @@ def get_summary_from_google(
         if response.text:
             return GeminiResponseSchema.model_validate_json(response.text)
     except genai.errors.ClientError as e:
-        raise ValidationError(e.message)
+        raise ValidationError(e.message, code="invalid")
     except Exception as e:
         raise ValidationError(e)

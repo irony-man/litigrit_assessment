@@ -1,25 +1,39 @@
 # App Imports
-from django.forms import ModelForm
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.forms import CharField, Form, ModelForm
 
-from llm.gemini import GeminiResponseSchema, get_summary_from_google
 from llm.models import Summary
-from llm.utils import extract_text_from_pdf
+
+
+class LoginForm(Form):
+    username = CharField()
+    password = CharField()
+
+
+class SignupForm(Form):
+    username = CharField()
+    password = CharField()
+    re_password = CharField()
+
+    def clean(self):
+        username = self.cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        re_password = self.cleaned_data.get("re_password")
+        if password != re_password:
+            raise ValidationError(
+                {"re_password": "Passwords doesn't match."}, code="invalid"
+            )
+
+        user = User(username=username)
+        user.validate_unique()
+        user.set_password(raw_password=password)
+        user.save()
+        self.cleaned_data["user"] = user
+        return self.cleaned_data
 
 
 class SummaryForm(ModelForm):
     class Meta:
         model = Summary
         fields = ("attachment", "summary_length")
-
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        cleaned_data["extracted_text"] = extract_text_from_pdf(
-            cleaned_data.get("attachment")
-        )
-
-        gemini_response: GeminiResponseSchema = get_summary_from_google(
-            cleaned_data["extracted_text"], cleaned_data.get("summary_length")
-        )
-        cleaned_data["title"] = gemini_response.title
-        cleaned_data["summary"] = gemini_response.summary
-        return cleaned_data

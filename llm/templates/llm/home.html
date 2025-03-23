@@ -3,9 +3,9 @@
 
 {% block content %}
 {% if history.count == 0 %}
-  <div class="position-relative h-100">
-    <div class="position-absolute h-100 w-100 d-flex flex-column justify-content-center align-items-center">
-      <div class="card max-w-640 text-center">
+  <div class="position-absolute w-100 top-50 start-50 translate-middle text-center">
+    <div class="container">
+      <div class="card max-w-400 text-center mx-auto">
         <div class="card-header display-6 fw-bold">
           PDF Summary
         </div>
@@ -55,5 +55,7 @@
   </ul>
   <div class="pb-5"></div>
 {% endif %}
+
+{% include 'llm/partials/summary-form.html' %}
 
 {% endblock content %}
