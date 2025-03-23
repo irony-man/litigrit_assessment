@@ -9,12 +9,27 @@ urlpatterns = [
         name="home",
     ),
     path(
-        "history/",
-        view=views.HistoryPageView.as_view(),
-        name="history",
+        "login/",
+        view=views.LoginPageView.as_view(),
+        name="login",
     ),
     path(
-        "summary/<uuid:summary_uid>/",
+        "signup/",
+        view=views.SignupPageView.as_view(),
+        name="signup",
+    ),
+    path(
+        "logout/",
+        view=views.LogoutView.as_view(),
+        name="logout",
+    ),
+    path(
+        "summary/",
+        view=views.SummaryFormView.as_view(),
+        name="summary-form",
+    ),
+    path(
+        "summary/<uuid:uid>/",
         view=views.SummaryPageView.as_view(),
         name="summary",
     ),

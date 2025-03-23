@@ -1,65 +1,61 @@
 {% extends 'llm/base.html' %}
-{% load static %}
+{% load static markdownify %}
 
 {% block content %}
-<form id="summary-form" method="POST" class="form mb-3" enctype="multipart/form-data">
-  {% csrf_token %}
-  <p class="fw-bold">If something is wrong, please let us know</p>
-  <div class="row g-4">
-    <!-- attachment -->
-    <div class="form-group col-md-6">
-        <label for="attachment" class="form-label">Attachment</label>
-      <div>
-        <input class="form-control" name="attachment" type="file" id="attachment" accept=".pdf">
-        {% if form.errors.attachment %}
-        <div class="small text-danger mt-2">{{ form.errors.attachment|join:' ' }}</div>
-        {% endif %}
+{% if history.count == 0 %}
+  <div class="position-absolute w-100 top-50 start-50 translate-middle text-center">
+    <div class="container">
+      <div class="card max-w-400 text-center mx-auto">
+        <div class="card-header display-6 fw-bold">
+          PDF Summary
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            A web app that quickly extracts and summarizes text from PDF files using the Gemini LLM API. Designed for efficiency, it helps users save time by turning long documents into concise, easy-to-read summaries. Built with Django, PostgreSQL, and a sleek Bootstrap frontend, it is the perfect tool for professionals and students who need fast insights from PDFs.
+          </p>
+        </div>
+        <div class="card-footer">
+          <p class="h5">
+            Upload to see History!
+          </p>
+        </div>
       </div>
     </div>
-    {% if form.errors.all %}
-    <div class="alert alert-danger mt-2">{{ form.errors.all|join:' ' }}</div>
-    {% endif %}
-    <div class="form-group col-12">
-      <button class="btn btn-primary" type="submit">
-        Submit
-      </button>
-    </div>
   </div>
-</form>
+{% else %}
+  <ul id="history" class="list-unstyled my-5">
+    {% for summary in history %}
+    <li class="d-flex justify-content-end mb-4">
+      <div class="card shadow chat-box">
+        <div class="card-header fw-bold">
+          {{ summary.attachment }}
+        </div>
+        <div class="card-body">
+          <p class="card-text mb-3">{{ summary.short_extracted_text|markdownify }}</p>
+          <a href="{% url 'llm:summary' summary.uid %}" class="btn btn-sm btn-outline-primary">Get Full Info</a>
+        </div>
+        <div class="card-footer">
+          <p class="small mb-0">{{ summary.created }}</p>
+        </div>
+      </div>
+    </li>
+    <li class="d-flex justify-content-start mb-4">
+      <div class="card shadow chat-box">
+        <div class="card-header fw-bold">
+          {{ summary.title }}
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            {{ summary.summary|markdownify }}
+          </p>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="pb-5"></div>
+{% endif %}
 
-<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-  <div id="toast" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-body" id="message">
-    </div>
-  </div>
-</div>
+{% include 'llm/partials/summary-form.html' %}
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const node = new bootstrap.Toast(document.getElementById('toast'), {autohide: true, delay: 3000});
-    const form = document.getElementById("summary-form");
-    const messageEle = document.getElementById("message");
-    form.onsubmit = async function (e) {
-      e.preventDefault();
-      let message = "";
-      const response = await fetch(form.action, {
-        method: "POST",
-        cache: "no-cache",
-        credentials: "same-origin",
-        body: new FormData(form),
-      });
-      if (response.status === 200) {
-        let result = await response.json();
-        message = result.message;
-      } else if (response.status === 400) {
-        let result = await response.json();
-        message = result.message;
-      } else {
-        message = "Something went wrong, please try again later.";
-      }
-      messageEle.innerHTML = message;
-      node.show();
-    };
-  });
-</script>
 {% endblock content %}

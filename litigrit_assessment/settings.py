@@ -70,6 +70,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "llm.context_processors.default_website_data",
             ],
         },
     },
@@ -83,8 +84,16 @@ WSGI_APPLICATION = "litigrit_assessment.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "NAME": os.getenv("POSTGRES_DATABASE"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "PORT": os.getenv("POSTGRES_PORT"),
+        "ATOMIC_REQUESTS": True,
+        "TEST": {
+            "NAME": "test_db",
+        },
     }
 }
 
@@ -122,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 

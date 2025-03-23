@@ -1,0 +1,20 @@
+a {
+  text-decoration: none !important;
+  font-weight: bold;
+}
+
+.chat-box {
+  width: 90%;
+  max-width: 780px;
+}
+
+.max-w-640 {
+  width: 100%;
+  max-width: 640px;
+}
+
+
+.max-w-400 {
+  width: 100%;
+  max-width: 400px;
+}
