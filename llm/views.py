@@ -53,6 +53,7 @@ class LoginPageView(FormView):
             form.errors.password = ("Invalid login credentials!!",)
             return super(LoginPageView, self).form_invalid(form)
         login(self.request, user)
+        self.request.session["uid"] = None
         return redirect(self.success_url)
 
 
@@ -72,6 +73,7 @@ class SignupPageView(FormView):
 
     def form_valid(self, form: SignupForm):
         login(self.request, form.cleaned_data["user"])
+        self.request.session["uid"] = None
         return redirect(self.success_url)
 
 
