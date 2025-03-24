@@ -43,6 +43,7 @@ def get_summary_from_google(
             ],
             config=generate_content_config,
         )
+
         if response.parsed:
             return response.parsed
         if response.text:
@@ -50,4 +51,4 @@ def get_summary_from_google(
     except genai.errors.ClientError as e:
         raise ValidationError(e.message, code="invalid")
     except Exception as e:
-        raise ValidationError(e)
+        raise e

@@ -38,8 +38,14 @@ distlib==0.3.9
 django==5.1.7
     # via
     #   -r requirements.in
+    #   django-filter
     #   django-markdownify
+    #   djangorestframework
+django-filter==25.1
+    # via -r requirements.in
 django-markdownify==0.9.5
+    # via -r requirements.in
+djangorestframework==3.15.2
     # via -r requirements.in
 filelock==3.18.0
     # via

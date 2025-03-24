@@ -1,14 +1,28 @@
+import uuid
+
 from django.contrib.auth import authenticate, login, logout
+from django.core.exceptions import ValidationError
 from django.db.models import Case, F, TextField, Value, When
 from django.db.models.functions import Concat, Length, Substr
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
+from rest_framework.exceptions import (
+    APIException,
+)
+from rest_framework.exceptions import ValidationError as DRFValidationError
+from rest_framework.status import (
+    HTTP_200_OK,
+)
+from rest_framework.views import APIView
 
-from llm.forms import LoginForm, SignupForm, SummaryForm
+from llm.forms import LoginForm, SignupForm
+from llm.gemini import GeminiResponseSchema, get_summary_from_google
 from llm.mixins import AuthMixin
 from llm.models import Summary
+from llm.serializers import SummarySerializer
+from llm.utils import extract_text_from_pdf
 
 
 def is_ajax(request) -> bool:
@@ -64,8 +78,15 @@ class HomePageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(HomePageView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            filters = dict(user__id=self.request.user.id)
+        elif uid := self.request.session.get("uid"):
+            filters = dict(session_uid=uid)
+        else:
+            filters = dict(uid=None)
         ctx["history"] = (
-            Summary.objects.annotate(
+            Summary.objects.filter(**filters)
+            .annotate(
                 extracted_text_length=Length("extracted_text"),
                 short_extracted_text=Case(
                     When(
@@ -91,32 +112,40 @@ class HomePageView(TemplateView):
         return ctx
 
 
-class SummaryFormView(FormView):
-    form_class = SummaryForm
-    template_name = "llm/home.html"
-    success_url = reverse_lazy("llm:home")
+class SummaryAPIView(APIView):
 
-    def form_valid(self, form: SummaryForm):
-        Summary.objects.create(**form.cleaned_data)
-        if is_ajax(self.request):
-            return JsonResponse(
-                data={
-                    "message": "Summary Created",
-                    "success_url": self.success_url,
-                },
-                status=201,
-            )
-        return redirect(self.success_url)
+    def post(self, request, *args, **kwargs):
+        try:
+            serializer = SummarySerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            instance: Summary = serializer.save()
 
-    def form_invalid(self, form: SummaryForm):
-        if is_ajax(self.request):
-            return JsonResponse(
-                {
-                    "errors": dict(form.errors.items()),
-                },
-                status=400,
+            instance.extracted_text = extract_text_from_pdf(
+                instance.attachment.path
             )
-        return super(SummaryFormView, self).form_invalid(form)
+
+            gemini_response: GeminiResponseSchema = get_summary_from_google(
+                instance.extracted_text, instance.summary_length
+            )
+            instance.title = gemini_response.title
+            instance.summary = gemini_response.summary
+            if request.user.is_authenticated:
+                instance.user = request.user
+            else:
+                uid = self.request.session.get("uid", str(uuid.uuid4()))
+                self.request.session["uid"] = uid
+                instance.session_uid = uid
+            instance.save()
+
+            return JsonResponse(
+                SummarySerializer(instance=instance).data, status=HTTP_200_OK
+            )
+        except ValidationError as e:
+            raise DRFValidationError(dict(detail=e))
+        except DRFValidationError as e:
+            raise e
+        except Exception as e:
+            raise APIException(e)
 
 
 class SummaryPageView(TemplateView):

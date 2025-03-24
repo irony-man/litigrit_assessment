@@ -61,6 +61,9 @@ async function execute(url, options) {
     } else if (response.status === 404) {
       throw new HttpNotFound("Http 404 [Not found]", data, response.status);
     } else if (response?.status >= 500) {
+      if(data.detail) {
+        throw new HttpServerError(data.detail);
+      }
       throw new HttpServerError(
        'Server Error: please contact support.'
       );

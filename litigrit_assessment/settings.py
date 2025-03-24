@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "markdownify.apps.MarkdownifyConfig",
     "llm.apps.LlmConfig",
 ]
@@ -70,6 +71,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.media",
                 "llm.context_processors.default_website_data",
             ],
         },
@@ -137,6 +139,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+STRFTIME_DATE_FORMAT = "%B %-d, %Y"
+STRFTIME_TIME_FORMAT = "%-I:%M %p"
+STRFTIME_DATETIME_FORMAT = f"{STRFTIME_DATE_FORMAT} {STRFTIME_TIME_FORMAT}"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -147,7 +152,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "global_static"),)
 
 # Media
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.getenv("MEDIA_ROOT")
+MEDIA_ROOT = BASE_DIR / os.getenv("MEDIA_ROOT")
 
 
 # Default primary key field type
@@ -157,3 +162,31 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Gemini
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+
+# Rest Framework
+REST_FRAMEWORK = {
+    "DATETIME_FORMAT": STRFTIME_DATETIME_FORMAT,
+    "TIME_FORMAT": STRFTIME_TIME_FORMAT,
+    "DATE_FORMAT": "iso-8601",
+    # ♥♥ strftime and strptime are so lovely ♥♥
+    "DATE_INPUT_FORMATS": ["iso-8601", "%b %d, %Y"],
+    "TIME_INPUT_FORMATS": ["%I:%M %p", "iso-8601"],  # Ordering sensitive
+    "DATETIME_INPUT_FORMATS": ["%Y-%m-%d %I:%M %p", "iso-8601"],
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+    "DEFAULT_PARSER_CLASSES": (
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+        "rest_framework.parsers.JSONParser",
+    ),
+    "DEFAULT_PAGINATION_CLASS": (
+        "rest_framework.pagination.LimitOffsetPagination"
+    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "PAGE_SIZE": 50,
+}
