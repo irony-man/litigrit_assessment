@@ -1,5 +1,5 @@
 
-import { postRequest, HttpBadRequestError } from "./network.js";
+import { postRequest, HttpBadRequestError, HttpServerError } from "./network.js";
 
 $(document).ready(function() {
   const toast = new bootstrap.Toast($('#errorToast')[0], { autohide: true, delay: 3000 });
@@ -26,11 +26,11 @@ $(document).ready(function() {
 
     try {
       const response = await postRequest("/summary/", formData);
-      window.location = response.success_url;
+      window.location = `/summary/${response.uid}`;
     } catch (error) {
       let message = "";
       if(error instanceof HttpBadRequestError) {
-        const { errors } = error.data;
+        const errors = error.data;
         if(errors?.attachment) {
           $attachmentError.text(errors?.attachment?.join(' '));
           $attachmentError.show();
@@ -39,9 +39,11 @@ $(document).ready(function() {
           $summaryLengthError.text(errors?.summary_length?.join(' '));
           $summaryLengthError.show();
         }
-        if(errors?.__all__) {
-          message = errors.__all__;
+        if(errors?.non_field_errors || errors?.detail) {
+          message = errors.non_field_errors || errors?.detail;
         }
+      } else if (error instanceof HttpServerError) {
+        message = error
       }
       if(message) {
         $('#message').text(message);

@@ -9,8 +9,8 @@ class SummaryAdmin(admin.ModelAdmin):
         "title",
         "attachment",
         "summary_length",
+        "user",
         "summary",
-        "created",
     )
     readonly_fields = (
         "title",

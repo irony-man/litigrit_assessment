@@ -1,9 +1,7 @@
 # App Imports
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import CharField, Form, ModelForm
-
-from llm.models import Summary
+from django.forms import CharField, Form
 
 
 class LoginForm(Form):
@@ -31,9 +29,3 @@ class SignupForm(Form):
         user.save()
         self.cleaned_data["user"] = user
         return self.cleaned_data
-
-
-class SummaryForm(ModelForm):
-    class Meta:
-        model = Summary
-        fields = ("attachment", "summary_length")

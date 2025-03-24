@@ -25,8 +25,8 @@ urlpatterns = [
     ),
     path(
         "summary/",
-        view=views.SummaryFormView.as_view(),
-        name="summary-form",
+        view=views.SummaryAPIView.as_view(),
+        name="summary",
     ),
     path(
         "summary/<uuid:uid>/",
