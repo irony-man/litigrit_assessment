@@ -7,6 +7,11 @@ from llm.models import Summary
 
 
 class SummarySerializer(serializers.ModelSerializer):
+    """
+    Serializer for Summary model which has read only
+    fields, means these fields cannot be edited from
+    frontend form data.
+    """
 
     class Meta:
         model = Summary

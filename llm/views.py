@@ -30,6 +30,10 @@ def is_ajax(request) -> bool:
 
 
 class LoginPageView(FormView):
+    """
+    Form View to log in the user, this uses django template
+    """
+
     form_class = LoginForm
     template_name = "llm/login.html"
     success_url = reverse_lazy("llm:home")
@@ -53,6 +57,10 @@ class LoginPageView(FormView):
 
 
 class SignupPageView(FormView):
+    """
+    Form View to sign up the user
+    """
+
     form_class = SignupForm
     template_name = "llm/signup.html"
     success_url = reverse_lazy("llm:home")
@@ -68,6 +76,10 @@ class SignupPageView(FormView):
 
 
 class LogoutView(AuthMixin, TemplateView):
+    """
+    View to logout the user if logged in
+    """
+
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect(reverse_lazy("llm:home"))
@@ -77,6 +89,12 @@ class HomePageView(TemplateView):
     template_name = "llm/home.html"
 
     def get_context_data(self, **kwargs):
+        """
+        Fetches chat history based on user's login status.
+
+        Reduces the extracted text length to 300 for optimized
+        list view using django ORM's annotate
+        """
         ctx = super(HomePageView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             filters = dict(user__id=self.request.user.id)
@@ -113,6 +131,11 @@ class HomePageView(TemplateView):
 
 
 class SummaryAPIView(APIView):
+    """
+    Summary post using DRF, we can also use FormView but I wanted to showcase
+    DRF skills. It assign values to Summary instance which we fetch data
+    from gemini and populates user and session_uid.
+    """
 
     def post(self, request, *args, **kwargs):
         try:
@@ -149,6 +172,10 @@ class SummaryAPIView(APIView):
 
 
 class SummaryPageView(TemplateView):
+    """
+    Sends context data to django template based on uid
+    """
+
     template_name = "llm/summary.html"
 
     def get_context_data(self, uid, **kwargs):

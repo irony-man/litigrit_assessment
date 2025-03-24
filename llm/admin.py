@@ -5,6 +5,10 @@ from llm.models import Summary
 
 @admin.register(Summary)
 class SummaryAdmin(admin.ModelAdmin):
+    """
+    Django admin panel for Summary model
+    """
+
     list_display = (
         "title",
         "attachment",

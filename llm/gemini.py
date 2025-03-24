@@ -9,9 +9,12 @@ from llm.taxonomies import SummaryLength
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 
-def get_output_token(
+def get_output_length(
     summary_length: SummaryLength = SummaryLength.SHORT,
 ) -> int:
+    """
+    Sets the length of response in words
+    """
     return {
         SummaryLength.SHORT: 120,
         SummaryLength.MEDIUM: 240,
@@ -27,6 +30,10 @@ class GeminiResponseSchema(BaseModel):
 def get_summary_from_google(
     content: str, summary_length: SummaryLength = SummaryLength.SHORT
 ) -> GeminiResponseSchema:
+    """
+    This fetches a response schema containing a title and
+    summary from Gemini API using extracted data from PDfs
+    """
     try:
         generate_content_config = types.GenerateContentConfig(
             temperature=0.1,
@@ -38,7 +45,7 @@ def get_summary_from_google(
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=[
-                f"Write a summary in {get_output_token(summary_length)} words",
+                f"Write summary in {get_output_length(summary_length)} words",
                 content,
             ],
             config=generate_content_config,

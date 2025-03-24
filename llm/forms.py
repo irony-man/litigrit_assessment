@@ -10,6 +10,10 @@ class LoginForm(Form):
 
 
 class SignupForm(Form):
+    """
+    Validates if password matchs and if the username is unique or not
+    """
+
     username = CharField()
     password = CharField()
     re_password = CharField()

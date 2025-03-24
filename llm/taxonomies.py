@@ -11,6 +11,10 @@ def serialize(klass) -> List[Dict[str, Any]]:
 
 
 class SummaryLength(TextChoices):
+    """
+    Choices for summary length, helps in setting the output length of summary
+    """
+
     SHORT = "SHORT", "Short"
     MEDIUM = "MEDIUM", "Medium"
     LONG = "LONG", "Long"

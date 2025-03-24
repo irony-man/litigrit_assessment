@@ -11,6 +11,8 @@ $(document).ready(function() {
 
   const $form = $('#summaryForm');
 
+  // Makes api call as opposed to default form POST, we can use default but I just wanted to showcase my skill
+
   $form.on('submit', async function(e) {
     const $submitBtnText = $('#submitBtnText');
     const $submitBtnSpinner = $('#submitBtnSpinner');
